@@ -1,33 +1,61 @@
 @import "tailwindcss";
 
 @theme {
-  --color-tomato: #E74C3C;
-  --color-tomato-light: #F8D7DA;
-  --color-tomato-dark: #C0392B;
+  --color-tomato: #F25757;
+  --color-tomato-light: #FDE8E8;
+  --color-tomato-dark: #D94444;
+  --color-green: #27AE60;
+  --color-amber: #F39C12;
+  --color-blue: #5DADE2;
+  --color-purple: #A569BD;
 }
 
 :root {
-  --color-bg: #ffffff;
-  --color-bg-secondary: #f8f9fa;
-  --color-text: #1a1a2e;
-  --color-text-secondary: #6b7280;
-  --color-border: #e5e7eb;
-  --color-card: #ffffff;
-  --color-hover: #f3f4f6;
-  --color-completed: #9ca3af;
+  /* Color palette — Neumorphic */
+  --color-bg: #F0F4F9;
+  --color-bg-secondary: #E8ECF1;
+  --color-text: #2C3E50;
+  --color-text-secondary: #7F8C8D;
+  --color-text-muted: #BDC3C7;
+  --color-white: #FFFFFF;
+  --color-card: #F0F4F9;
+  --color-hover: #E8ECF1;
+  --color-completed: #BDC3C7;
+  --color-border: #D6DBE3;
+
+  /* Neumorphic shadows (light from top-left) */
+  --shadow-raised: 8px 8px 16px #D6DBE3, -8px -8px 16px #FFFFFF;
+  --shadow-recessed: inset 6px 6px 12px #D6DBE3, inset -6px -6px 12px #FFFFFF;
+  --shadow-deep: inset 8px 8px 16px #C8CDD5, inset -4px -4px 8px #FFFFFF;
+  --shadow-subtle: 4px 4px 8px #D6DBE3, -2px -2px 4px #FFFFFF;
+  --shadow-pressed: 2px 2px 4px #D6DBE3, -1px -1px 2px #FFFFFF, inset 2px 2px 4px rgba(214,219,227,0.5);
+
+  /* Soft card shadow (for white-bg cards on neumorphic bg) */
+  --shadow-card: 6px 6px 12px #D6DBE3, -4px -4px 10px #FFFFFF;
+
+  /* Typography */
   --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
 }
 
 .dark {
-  --color-bg: #1a1a2e;
-  --color-bg-secondary: #16213e;
-  --color-text: #e5e7eb;
-  --color-text-secondary: #9ca3af;
-  --color-border: #374151;
-  --color-card: #1f2937;
-  --color-hover: #374151;
-  --color-completed: #6b7280;
+  --color-bg: #1E2A38;
+  --color-bg-secondary: #293847;
+  --color-text: #E5E9F0;
+  --color-text-secondary: #8F9BB3;
+  --color-text-muted: #5C6B7D;
+  --color-white: #243447;
+  --color-card: #1E2A38;
+  --color-hover: #293847;
+  --color-completed: #4A5568;
+  --color-border: #2C4053;
+
+  --shadow-raised: 8px 8px 16px #16212E, -8px -8px 16px #2C4053;
+  --shadow-recessed: inset 6px 6px 12px #16212E, inset -6px -6px 12px #2C4053;
+  --shadow-deep: inset 8px 8px 16px #111A24, inset -4px -4px 8px #2C4053;
+  --shadow-subtle: 4px 4px 8px #16212E, -2px -2px 4px #2C4053;
+  --shadow-pressed: 2px 2px 4px #16212E, -1px -1px 2px #2C4053, inset 2px 2px 4px rgba(22,33,46,0.5);
+  --shadow-card: 6px 6px 12px #16212E, -4px -4px 10px #2C4053;
 }
 
 body {
@@ -50,7 +78,6 @@ body {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
 }
-
 .timer-running .timer-colon {
   animation: pulse-timer 1s ease-in-out infinite;
 }
@@ -61,7 +88,6 @@ body {
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
-
 .shake {
   animation: shake 0.3s ease-in-out;
 }
@@ -71,20 +97,28 @@ body {
   from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
-
 .slide-up {
   animation: slide-up 0.3s ease-out;
 }
 
+/* Popover appear */
+@keyframes popover-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.popover-in {
+  animation: popover-in 0.2s ease-out;
+}
+
+/* TodoItem hover — subtle raised shadow */
+.todo-item-hover:hover {
+  box-shadow: var(--shadow-subtle);
+  background: #F5F7FB;
+}
+
 /* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
   background-color: var(--color-border);
   border-radius: 3px;

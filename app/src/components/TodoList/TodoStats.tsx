@@ -23,12 +23,10 @@ export function TodoStats() {
         <Clock size={16} />
         <span>{todayPomodoros} 番茄</span>
       </div>
-      <div className="w-px h-4 bg-gray-200 dark:bg-gray-700" />
-      <div className="flex items-center gap-1.5 text-green-600 dark:text-green-400 font-medium">
+      <div className="w-px h-4" style={{ background: 'var(--color-border)' }} />
+      <div className="flex items-center gap-1.5 text-green font-medium">
         <CheckCircle2 size={16} />
-        <span>
-          {completedCount}/{totalCount}
-        </span>
+        <span>{completedCount}/{totalCount}</span>
       </div>
     </div>
   )

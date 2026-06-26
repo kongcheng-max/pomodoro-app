@@ -13,39 +13,31 @@ export function BadgeWall() {
 
   return (
     <div className="space-y-4">
-      {/* Progress */}
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+      <div
+        className="p-4 rounded-2xl"
+        style={{ background: '#FFFFFF', boxShadow: 'var(--shadow-raised)' }}
+      >
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-500">徽章进度</span>
+          <span className="text-sm font-medium text-[var(--color-text-secondary)]">徽章进度</span>
           <span className="text-sm font-bold text-tomato">{unlocked}/{badges.length}</span>
         </div>
-        <div className="w-full h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="w-full h-2 rounded-full overflow-hidden" style={{ background: 'var(--color-bg-secondary)' }}>
           <div
-            className="h-full bg-gradient-to-r from-tomato to-amber-500 rounded-full transition-all"
-            style={{ width: `${(unlocked / badges.length) * 100}%` }}
+            className="h-full rounded-full transition-all"
+            style={{ width: `${(unlocked / badges.length) * 100}%`, background: 'linear-gradient(to right, #F25757, #F39C12)' }}
           />
         </div>
       </div>
 
-      {/* Unlocked badges first */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {badges
-          .filter((b) => b.unlocked)
-          .map((badge) => (
-            <BadgeComponent key={badge.id} badge={badge} />
-          ))}
+        {badges.filter((b) => b.unlocked).map((b) => (<BadgeComponent key={b.id} badge={b} />))}
       </div>
 
-      {/* Locked badges */}
       {unlocked < badges.length && (
         <>
-          <h4 className="text-sm font-medium text-gray-400 pt-2">待解锁</h4>
+          <h4 className="text-sm font-medium text-[var(--color-text-muted)] pt-2">待解锁</h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {badges
-              .filter((b) => !b.unlocked)
-              .map((badge) => (
-                <BadgeComponent key={badge.id} badge={badge} />
-              ))}
+            {badges.filter((b) => !b.unlocked).map((b) => (<BadgeComponent key={b.id} badge={b} />))}
           </div>
         </>
       )}

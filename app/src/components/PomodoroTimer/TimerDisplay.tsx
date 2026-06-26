@@ -11,61 +11,68 @@ export function TimerDisplay() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 select-none">
-      {/* Mode label */}
+      {/* Mode label pill */}
       <span
-        className={`text-sm font-medium px-3 py-1 rounded-full ${
+        className={`text-xs font-medium px-3 py-1 rounded-full ${
           mode === 'focus'
-            ? 'bg-tomato/10 text-tomato'
-            : 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400'
+            ? 'bg-tomato-light text-tomato'
+            : 'bg-green-100 text-green dark:bg-green-900/30 dark:text-green'
         }`}
       >
         {modeLabel}
       </span>
 
-      {/* Timer display */}
+      {/* Timer ring — recessed circular track */}
       <div
         className={`relative flex items-center justify-center ${
           status === 'running' ? 'timer-running' : ''
         }`}
       >
-        {/* Circular progress ring */}
-        <svg className="w-64 h-64 sm:w-72 sm:h-72 -rotate-90">
-          <circle
-            cx="50%"
-            cy="50%"
-            r="45%"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="4"
-            className="text-gray-200 dark:text-gray-700"
-          />
-          <circle
-            cx="50%"
-            cy="50%"
-            r="45%"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="4"
-            strokeLinecap="round"
-            className={`transition-all duration-300 ${
-              status === 'finished'
-                ? 'text-green-500'
-                : mode === 'focus'
-                  ? 'text-tomato'
-                  : 'text-green-500'
-            }`}
-            style={{
-              strokeDasharray: `${2 * Math.PI * 45}%`,
-              strokeDashoffset: `${2 * Math.PI * 45 * (1 - progress)}%`,
-            }}
-          />
-        </svg>
+        {/* Recessed track container */}
+        <div
+          className="w-64 h-64 sm:w-72 sm:h-72 rounded-full"
+          style={{ boxShadow: 'var(--shadow-deep)' }}
+        >
+          <svg className="w-full h-full -rotate-90">
+            {/* Track */}
+            <circle
+              cx="50%"
+              cy="50%"
+              r="45%"
+              fill="none"
+              stroke="#E8ECF1"
+              strokeWidth="8"
+              className="dark:stroke-[#293847]"
+            />
+            {/* Progress arc */}
+            <circle
+              cx="50%"
+              cy="50%"
+              r="45%"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="8"
+              strokeLinecap="round"
+              className={`transition-all duration-300 ${
+                status === 'finished'
+                  ? 'text-green'
+                  : mode === 'focus'
+                    ? 'text-tomato'
+                    : 'text-green'
+              }`}
+              style={{
+                strokeDasharray: `${2 * Math.PI * 45}%`,
+                strokeDashoffset: `${2 * Math.PI * 45 * (1 - progress)}%`,
+              }}
+            />
+          </svg>
+        </div>
 
         {/* Time text */}
         <span
           className={`absolute font-mono font-bold tracking-tight tabular-nums ${
             status === 'finished'
-              ? 'text-green-500 text-5xl sm:text-6xl'
+              ? 'text-green text-5xl sm:text-6xl'
               : 'text-6xl sm:text-7xl text-[var(--color-text)]'
           } ${status === 'running' ? 'scale-105' : ''} transition-transform duration-300`}
         >

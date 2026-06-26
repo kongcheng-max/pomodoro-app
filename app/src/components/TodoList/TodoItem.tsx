@@ -25,61 +25,42 @@ export function TodoItem({ todo }: TodoItemProps) {
   const isIdle = status === 'idle' || status === 'finished'
 
   useEffect(() => {
-    if (editing) {
-      editRef.current?.focus()
-      editRef.current?.select()
-    }
+    if (editing) { editRef.current?.focus(); editRef.current?.select() }
   }, [editing])
-
-  const handleDoubleClick = () => {
-    if (todo.completed) return
-    setEditTitle(todo.title)
-    setEditing(true)
-  }
 
   const handleEditConfirm = () => {
     const trimmed = editTitle.trim()
-    if (trimmed && trimmed !== todo.title) {
-      editTodo(todo.id, trimmed)
-    }
+    if (trimmed && trimmed !== todo.title) editTodo(todo.id, trimmed)
     setEditing(false)
   }
 
-  const handleEditKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') handleEditConfirm()
-    if (e.key === 'Escape') setEditing(false)
+  const selectHandler = () => {
+    if (isIdle && !todo.completed) selectTodo(isSelected ? null : todo.id)
   }
 
-  const handleSelect = () => {
-    if (isIdle && !todo.completed) {
-      selectTodo(isSelected ? null : todo.id)
-    }
-  }
-
-  const handleStartPomodoro = (e: React.MouseEvent) => {
+  const quickStart = (e: React.MouseEvent) => {
     e.stopPropagation()
-    if (isIdle) {
-      selectTodo(todo.id)
-      start(todo.id)
-    }
+    if (isIdle) { selectTodo(todo.id); start(todo.id) }
   }
+
+  const itemStyle: React.CSSProperties = todo.completed
+    ? { boxShadow: 'var(--shadow-recessed)', opacity: 0.6 }
+    : isSelected
+      ? { boxShadow: 'var(--shadow-subtle)', background: '#FDE8E8', borderLeft: '3px solid rgba(242,87,87,0.2)' }
+      : {}
 
   return (
     <div
-      onClick={handleSelect}
+      onClick={selectHandler}
       className={`group flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
-                  transition-all duration-200 border border-transparent
-                  ${isSelected ? 'bg-tomato/5 border-tomato/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}
-                  ${todo.completed ? 'opacity-60' : ''}`}
+                  transition-all duration-300 border border-transparent
+                  ${!todo.completed && !isSelected ? 'todo-item-hover' : ''}`}
+      style={itemStyle}
     >
       {/* Checkbox */}
       <button
-        onClick={(e) => {
-          e.stopPropagation()
-          toggleTodo(todo.id)
-        }}
-        className="flex-shrink-0 text-gray-300 dark:text-gray-600 hover:text-tomato
-                   transition-colors"
+        onClick={(e) => { e.stopPropagation(); toggleTodo(todo.id) }}
+        className="flex-shrink-0 text-[var(--color-text-muted)] hover:text-tomato transition-colors"
       >
         {todo.completed ? (
           <CheckCircle2 size={22} className="text-tomato" />
@@ -88,7 +69,7 @@ export function TodoItem({ todo }: TodoItemProps) {
         )}
       </button>
 
-      {/* Title / Edit input */}
+      {/* Title / Edit */}
       {editing ? (
         <input
           ref={editRef}
@@ -96,17 +77,16 @@ export function TodoItem({ todo }: TodoItemProps) {
           value={editTitle}
           onChange={(e) => setEditTitle(e.target.value)}
           onBlur={handleEditConfirm}
-          onKeyDown={handleEditKeyDown}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleEditConfirm(); if (e.key === 'Escape') setEditing(false) }}
           maxLength={200}
-          className="flex-1 bg-white dark:bg-gray-700 border border-tomato/40 rounded-lg
-                     px-2 py-0.5 text-sm outline-none"
+          className="flex-1 bg-white dark:bg-gray-700 border border-tomato/40 rounded-lg px-2 py-0.5 text-sm outline-none"
         />
       ) : (
         <span
-          onDoubleClick={handleDoubleClick}
+          onDoubleClick={() => { if (!todo.completed) { setEditTitle(todo.title); setEditing(true) } }}
           className={`flex-1 text-sm select-none ${
             todo.completed
-              ? 'line-through text-gray-400 dark:text-gray-500'
+              ? 'line-through text-[var(--color-completed)]'
               : 'text-[var(--color-text)]'
           }`}
         >
@@ -117,15 +97,14 @@ export function TodoItem({ todo }: TodoItemProps) {
       {/* Pomodoro count */}
       {todo.pomodoroCount > 0 && (
         <span className="flex items-center gap-0.5 text-xs text-tomato font-medium">
-          <Clock size={12} />
-          {todo.pomodoroCount}
+          <Clock size={12} />{todo.pomodoroCount}
         </span>
       )}
 
-      {/* Quick start pomodoro */}
+      {/* Quick start */}
       {!todo.completed && isIdle && (
         <button
-          onClick={handleStartPomodoro}
+          onClick={quickStart}
           className="flex-shrink-0 w-6 h-6 rounded-full bg-tomato/10 text-tomato
                      flex items-center justify-center opacity-0 group-hover:opacity-100
                      hover:bg-tomato hover:text-white transition-all active:scale-90"
@@ -139,13 +118,9 @@ export function TodoItem({ todo }: TodoItemProps) {
 
       {/* Delete */}
       <button
-        onClick={(e) => {
-          e.stopPropagation()
-          deleteTodo(todo.id)
-        }}
-        className="flex-shrink-0 text-gray-300 dark:text-gray-600
-                   opacity-0 group-hover:opacity-100 hover:text-tomato
-                   transition-all active:scale-90"
+        onClick={(e) => { e.stopPropagation(); deleteTodo(todo.id) }}
+        className="flex-shrink-0 text-[var(--color-text-muted)]
+                   opacity-0 group-hover:opacity-100 hover:text-tomato transition-all active:scale-90"
         title="删除任务"
       >
         <Trash2 size={16} />

@@ -23,8 +23,8 @@ export function TimerModeTabs() {
   const settings = load().settings
 
   return (
-    <div className="w-full max-w-xs mx-auto mb-3">
-      <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-xl p-1">
+    <div className="w-full max-w-xs mx-auto mb-4">
+      <div className="flex gap-1 bg-[var(--color-bg)] rounded-full p-1">
         {TABS.map((tab) => {
           const active = mode === tab.mode
           const duration = getDuration(tab.mode, settings)
@@ -34,15 +34,17 @@ export function TimerModeTabs() {
               key={tab.mode}
               onClick={() => !isLocked && setMode(tab.mode)}
               disabled={isLocked}
-              className={`flex-1 py-1.5 px-1 text-xs sm:text-sm rounded-lg font-medium transition-all duration-200 ${
-                active
-                  ? 'bg-white dark:bg-gray-700 text-tomato shadow-sm'
-                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-              } ${isLocked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+              className={`flex-1 py-1.5 px-1 text-xs sm:text-sm rounded-full font-medium
+                         transition-all duration-300 ${
+                           active
+                             ? 'text-tomato'
+                             : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
+                         } ${isLocked ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+              style={active ? { background: '#FFFFFF', boxShadow: 'var(--shadow-subtle)' } : {}}
               title={isLocked ? '计时中无法切换模式' : `${tab.label} ${duration} 分钟`}
             >
               <span className="block">{tab.label}</span>
-              <span className={`block text-[10px] sm:text-xs ${active ? 'opacity-70' : 'opacity-50'}`}>
+              <span className={`block text-[10px] sm:text-xs opacity-50`}>
                 {duration}min
               </span>
             </button>

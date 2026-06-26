@@ -1,8 +1,8 @@
 ---
 id: BUG-014
 severity: major
-status: open
-reported_by: 产品部 · 手动验收 · 无痕窗口也复现
+status: verified
+reported_by: 产品部 · 手动验收 · 部署到 HTTPS 后正常
 reported_date: 2026-06-26
 module: PWA
 ---

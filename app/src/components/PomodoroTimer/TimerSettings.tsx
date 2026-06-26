@@ -21,31 +21,14 @@ export function TimerSettings() {
 
   const isIdle = status === 'idle' || status === 'finished'
 
-  const handleSelect = (min: number) => {
-    setDuration(min)
-    setCustom('')
-    setError(false)
-  }
-
-  const handleCustom = () => {
-    const val = parseInt(custom, 10)
-    if (val >= 1 && val <= 120) {
-      setDuration(val)
-      setOpen(false)
-      setError(false)
-    } else {
-      setError(true)
-      setTimeout(() => setError(false), 2000)
-    }
-  }
-
   return (
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
         disabled={!isIdle}
-        className="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600
-                   dark:hover:text-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+        className="flex items-center gap-1 text-sm text-[var(--color-text-muted)]
+                   hover:text-[var(--color-text-secondary)] transition-colors
+                   disabled:opacity-30 disabled:cursor-not-allowed"
       >
         <Settings size={16} />
         {duration} 分钟
@@ -53,20 +36,14 @@ export function TimerSettings() {
 
       {open && (
         <>
+          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <div
-            className="fixed inset-0 z-10"
-            onClick={() => setOpen(false)}
-          />
-          <div
-            className="absolute top-full mt-2 right-0 z-[60] bg-white dark:bg-gray-800
-                          border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl p-4 w-56"
+            className="absolute top-full mt-2 right-0 z-[60] rounded-2xl p-4 w-56 popover-in"
+            style={{ background: '#FFFFFF', boxShadow: 'var(--shadow-raised)' }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-medium text-gray-500">{LABELS[mode]}</span>
-              <button
-                onClick={() => setOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
+              <span className="text-sm font-medium text-[var(--color-text-secondary)]">{LABELS[mode]}</span>
+              <button onClick={() => setOpen(false)} className="text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)]">
                 <X size={16} />
               </button>
             </div>
@@ -75,12 +52,13 @@ export function TimerSettings() {
               {PRESETS.map((min) => (
                 <button
                   key={min}
-                  onClick={() => handleSelect(min)}
-                  className={`px-2 py-1.5 text-sm rounded-lg transition-colors ${
+                  onClick={() => { setDuration(min); setCustom(''); setError(false) }}
+                  className={`px-2 py-1.5 text-sm rounded-xl transition-all ${
                     duration === min
                       ? 'bg-tomato text-white'
-                      : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text)]'
                   }`}
+                  style={duration === min ? { boxShadow: '2px 2px 4px rgba(242,87,87,0.2)' } : {}}
                 >
                   {min} 分钟
                 </button>
@@ -89,24 +67,20 @@ export function TimerSettings() {
 
             <div className="flex gap-2">
               <input
-                type="number"
-                min={1}
-                max={120}
+                type="number" min={1} max={120}
                 value={custom}
                 onChange={(e) => { setCustom(e.target.value); if (error) setError(false) }}
-                onKeyDown={(e) => e.key === 'Enter' && handleCustom()}
+                onKeyDown={(e) => { if (e.key === 'Enter') { const v = parseInt(custom, 10); if (v >= 1 && v <= 120) { setDuration(v); setOpen(false); setError(false) } else { setError(true); setTimeout(() => setError(false), 2000) } } }}
                 placeholder="1~120 分钟"
-                className={`flex-1 px-3 py-1.5 text-sm rounded-lg bg-gray-50 dark:bg-gray-700
-                           focus:outline-none focus:ring-2 dark:text-white transition-colors ${
-                             error
-                               ? 'border-red-400 border-2 shake focus:ring-red-400/50'
-                               : 'border border-gray-200 dark:border-gray-600 focus:ring-tomato/50'
-                           }`}
+                className={`flex-1 px-3 py-1.5 text-sm rounded-xl dark:text-white outline-none transition-colors ${
+                  error ? 'border-red-400 border-2 shake' : ''
+                }`}
+                style={error ? {} : { boxShadow: 'var(--shadow-recessed)', background: 'var(--color-bg)', border: 'none' }}
               />
               <button
-                onClick={handleCustom}
-                className="px-3 py-1.5 text-sm bg-tomato text-white rounded-lg
-                           hover:bg-tomato-dark transition-colors"
+                onClick={() => { const v = parseInt(custom, 10); if (v >= 1 && v <= 120) { setDuration(v); setOpen(false); setError(false) } else { setError(true); setTimeout(() => setError(false), 2000) } }}
+                className="px-3 py-1.5 text-sm bg-tomato text-white rounded-xl hover:bg-tomato-dark transition-colors"
+                style={{ boxShadow: '2px 2px 4px rgba(242,87,87,0.2)' }}
               >
                 确定
               </button>

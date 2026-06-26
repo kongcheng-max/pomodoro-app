@@ -9,18 +9,21 @@ const NAV_ITEMS = [
 
 export function BottomNav() {
   return (
-    <nav className="sticky bottom-0 z-50 bg-[var(--color-bg)]/80 backdrop-blur-md border-t border-[var(--color-border)]">
+    <nav
+      className="sticky bottom-0 z-50 backdrop-blur-md border-t"
+      style={{
+        background: 'rgba(240,244,249,0.85)',
+        borderColor: 'var(--color-border)',
+        boxShadow: 'var(--shadow-subtle)',
+      }}
+    >
       <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
         {NAV_ITEMS.map((item) => (
           <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.to === '/'}
+            key={item.to} to={item.to} end={item.to === '/'}
             className={({ isActive }) =>
               `flex flex-col items-center gap-1 px-4 py-2 text-xs font-medium transition-colors ${
-                isActive
-                  ? 'text-tomato'
-                  : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                isActive ? 'text-tomato' : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
               }`
             }
           >
